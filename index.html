@@ -920,7 +920,7 @@ body {
 
 /* Smooth gallery transition */
 #photoModalImg {
-  transition: opacity 0.25s ease;
+  transition: opacity 0.12s ease;
 }
 #photoModalImg.fading {
   opacity: 0;
@@ -1508,23 +1508,35 @@ const galleryPhotos = [
   "19.jpg","20.jpg","21.jpg","22.jpg"
 ];
 let currentPhotoIdx = 0;
+let isAnimating = false;
 
 function showPhoto(idx) {
+  if (isAnimating) return;
+  isAnimating = true;
   const img = document.getElementById('photoModalImg');
-  img.classList.add('fading');
+  img.style.opacity = '0';
   setTimeout(function() {
     currentPhotoIdx = idx;
     img.src = galleryPhotos[idx];
-    img.classList.remove('fading');
-  }, 150);
+    img.onload = function() {
+      img.style.opacity = '1';
+      isAnimating = false;
+    };
+    // Fallback in case onload doesn't fire (cached)
+    setTimeout(function() {
+      img.style.opacity = '1';
+      isAnimating = false;
+    }, 300);
+  }, 120);
 }
 
 function openPhoto(idx) {
   currentPhotoIdx = idx;
   const img = document.getElementById('photoModalImg');
   img.src = galleryPhotos[idx];
-  img.classList.remove('fading');
+  img.style.opacity = '1';
   document.getElementById('photoModal').style.display = 'flex';
+  isAnimating = false;
 }
 function closePhoto() {
   document.getElementById('photoModal').style.display = 'none';
@@ -1537,23 +1549,38 @@ function prevPhoto() {
   showPhoto((currentPhotoIdx - 1 + galleryPhotos.length) % galleryPhotos.length);
 }
 
-// Arrow button event listeners (touchstart for mobile)
-document.getElementById('photoPrev').addEventListener('touchstart', function(e) {
-  e.preventDefault(); e.stopPropagation(); prevPhoto();
-}, {passive: false});
-document.getElementById('photoPrev').addEventListener('click', function(e) {
-  e.stopPropagation(); prevPhoto();
-});
-document.getElementById('photoNext').addEventListener('touchstart', function(e) {
-  e.preventDefault(); e.stopPropagation(); nextPhoto();
-}, {passive: false});
-document.getElementById('photoNext').addEventListener('click', function(e) {
-  e.stopPropagation(); nextPhoto();
-})
-
-// Close on background click
+// Modal close - ONLY when clicking the dark background itself
 document.getElementById('photoModal').addEventListener('click', function(e) {
   if (e.target === this) closePhoto();
+});
+
+// Arrow buttons - prevent event bubbling so modal doesn't close
+document.getElementById('photoPrev').addEventListener('click', function(e) {
+  e.preventDefault(); e.stopPropagation(); prevPhoto();
+});
+document.getElementById('photoNext').addEventListener('click', function(e) {
+  e.preventDefault(); e.stopPropagation(); nextPhoto();
+});
+
+// Mobile touch for arrow buttons
+document.getElementById('photoPrev').addEventListener('touchend', function(e) {
+  e.preventDefault(); e.stopPropagation(); prevPhoto();
+}, {passive: false});
+document.getElementById('photoNext').addEventListener('touchend', function(e) {
+  e.preventDefault(); e.stopPropagation(); nextPhoto();
+}, {passive: false});
+
+// Also prevent touchstart from bubbling on buttons
+document.getElementById('photoPrev').addEventListener('touchstart', function(e) {
+  e.stopPropagation();
+}, {passive: false});
+document.getElementById('photoNext').addEventListener('touchstart', function(e) {
+  e.stopPropagation();
+}, {passive: false});
+
+// Prevent image click from closing modal
+document.getElementById('photoModalImg').addEventListener('click', function(e) {
+  e.stopPropagation();
 });
 
 // Keyboard navigation
@@ -1568,17 +1595,25 @@ document.addEventListener('keydown', function(e) {
 // Swipe support for mobile
 (function() {
   let startX = 0;
+  let startY = 0;
   const modal = document.getElementById('photoModal');
+  const img = document.getElementById('photoModalImg');
+  
   modal.addEventListener('touchstart', function(e) {
     startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
   }, {passive: true});
+  
   modal.addEventListener('touchend', function(e) {
-    const diff = startX - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) nextPhoto();
+    const diffX = startX - e.changedTouches[0].clientX;
+    const diffY = startY - e.changedTouches[0].clientY;
+    // Only swipe if horizontal movement > vertical (not scrolling)
+    if (Math.abs(diffX) > 50 && Math.abs(diffX) > Math.abs(diffY)) {
+      e.preventDefault();
+      if (diffX > 0) nextPhoto();
       else prevPhoto();
     }
-  }, {passive: true});
+  }, {passive: false});
 })();
 // ── Contact modal ──
 function openContactModal() {
