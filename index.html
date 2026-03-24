@@ -917,6 +917,14 @@ body {
 #gallery-grid img.loaded {
   opacity: 1;
 }
+
+/* Smooth gallery transition */
+#photoModalImg {
+  transition: opacity 0.25s ease;
+}
+#photoModalImg.fading {
+  opacity: 0;
+}
 </style>
 </head>
 <body>
@@ -1158,9 +1166,9 @@ body {
 
 <!-- Photo viewer modal -->
 <div id="photoModal" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.92);align-items:center;justify-content:center;touch-action:none;" onclick="closePhoto()">
-  <button id="photoPrev" onclick="prevPhoto()" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.7);border:none;border-radius:50%;width:40px;height:40px;font-size:20px;cursor:pointer;z-index:1001;">❮</button>
+  <button id="photoPrev" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.85);border:none;border-radius:50%;width:48px;height:48px;font-size:22px;cursor:pointer;z-index:1001;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;">❮</button>
 <img id="photoModalImg" src="" style="max-width:85%;max-height:90vh;object-fit:contain;border-radius:4px;touch-action:none;pointer-events:none;"/>
-<button id="photoNext" onclick="nextPhoto()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.7);border:none;border-radius:50%;width:40px;height:40px;font-size:20px;cursor:pointer;z-index:1001;">❯</button>
+<button id="photoNext" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.85);border:none;border-radius:50%;width:48px;height:48px;font-size:22px;cursor:pointer;z-index:1001;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;">❯</button>
   <button onclick="closePhoto()" style="position:absolute;top:20px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;line-height:1;">×</button>
 </div>
 
@@ -1501,9 +1509,21 @@ const galleryPhotos = [
 ];
 let currentPhotoIdx = 0;
 
+function showPhoto(idx) {
+  const img = document.getElementById('photoModalImg');
+  img.classList.add('fading');
+  setTimeout(function() {
+    currentPhotoIdx = idx;
+    img.src = galleryPhotos[idx];
+    img.classList.remove('fading');
+  }, 150);
+}
+
 function openPhoto(idx) {
   currentPhotoIdx = idx;
-  document.getElementById('photoModalImg').src = galleryPhotos[idx];
+  const img = document.getElementById('photoModalImg');
+  img.src = galleryPhotos[idx];
+  img.classList.remove('fading');
   document.getElementById('photoModal').style.display = 'flex';
 }
 function closePhoto() {
@@ -1511,13 +1531,25 @@ function closePhoto() {
   document.getElementById('photoModalImg').src = '';
 }
 function nextPhoto() {
-  currentPhotoIdx = (currentPhotoIdx + 1) % galleryPhotos.length;
-  document.getElementById('photoModalImg').src = galleryPhotos[currentPhotoIdx];
+  showPhoto((currentPhotoIdx + 1) % galleryPhotos.length);
 }
 function prevPhoto() {
-  currentPhotoIdx = (currentPhotoIdx - 1 + galleryPhotos.length) % galleryPhotos.length;
-  document.getElementById('photoModalImg').src = galleryPhotos[currentPhotoIdx];
+  showPhoto((currentPhotoIdx - 1 + galleryPhotos.length) % galleryPhotos.length);
 }
+
+// Arrow button event listeners (touchstart for mobile)
+document.getElementById('photoPrev').addEventListener('touchstart', function(e) {
+  e.preventDefault(); e.stopPropagation(); prevPhoto();
+}, {passive: false});
+document.getElementById('photoPrev').addEventListener('click', function(e) {
+  e.stopPropagation(); prevPhoto();
+});
+document.getElementById('photoNext').addEventListener('touchstart', function(e) {
+  e.preventDefault(); e.stopPropagation(); nextPhoto();
+}, {passive: false});
+document.getElementById('photoNext').addEventListener('click', function(e) {
+  e.stopPropagation(); nextPhoto();
+})
 
 // Close on background click
 document.getElementById('photoModal').addEventListener('click', function(e) {
