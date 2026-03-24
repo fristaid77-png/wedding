@@ -925,6 +925,23 @@ body {
 #photoModalImg.fading {
   opacity: 0;
 }
+
+/* Fix mobile button tap highlight */
+#photoPrev, #photoNext {
+  -webkit-tap-highlight-color: transparent !important;
+  background: rgba(255,255,255,0.85) !important;
+  outline: none !important;
+}
+#photoPrev:active, #photoNext:active,
+#photoPrev:focus, #photoNext:focus {
+  background: rgba(255,255,255,0.95) !important;
+  outline: none !important;
+}
+
+/* Smooth gallery image crossfade */
+#photoModalImg {
+  transition: opacity 0.15s ease-in-out !important;
+}
 </style>
 </head>
 <body>
@@ -1510,18 +1527,41 @@ const galleryPhotos = [
 let currentPhotoIdx = 0;
 let isAnimating = false;
 
+// Preload adjacent images for smooth transitions
+function preloadAdjacent(idx) {
+  var next = (idx + 1) % galleryPhotos.length;
+  var prev = (idx - 1 + galleryPhotos.length) % galleryPhotos.length;
+  new Image().src = galleryPhotos[next];
+  new Image().src = galleryPhotos[prev];
+}
+
 function showPhoto(idx) {
   if (isAnimating) return;
   isAnimating = true;
-  const img = document.getElementById('photoModalImg');
-  img.style.opacity = '0';
-  setTimeout(function() {
-    currentPhotoIdx = idx;
-    img.src = galleryPhotos[idx];
-    img.onload = function() {
+  var img = document.getElementById('photoModalImg');
+  // Preload target image first
+  var preload = new Image();
+  preload.onload = function() {
+    img.style.opacity = '0';
+    setTimeout(function() {
+      currentPhotoIdx = idx;
+      img.src = galleryPhotos[idx];
       img.style.opacity = '1';
       isAnimating = false;
-    };
+      preloadAdjacent(idx);
+    }, 80);
+  };
+  preload.src = galleryPhotos[idx];
+  // Fallback timeout
+  setTimeout(function() {
+    if (isAnimating) {
+      currentPhotoIdx = idx;
+      img.src = galleryPhotos[idx];
+      img.style.opacity = '1';
+      isAnimating = false;
+    }
+  }, 500);
+};
     // Fallback in case onload doesn't fire (cached)
     setTimeout(function() {
       img.style.opacity = '1';
@@ -1532,6 +1572,7 @@ function showPhoto(idx) {
 
 function openPhoto(idx) {
   currentPhotoIdx = idx;
+  preloadAdjacent(idx);
   const img = document.getElementById('photoModalImg');
   img.src = galleryPhotos[idx];
   img.style.opacity = '1';
