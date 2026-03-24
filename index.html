@@ -912,11 +912,6 @@ body {
 
 
 
-
-/* Smooth crossfade for gallery */
-#photoA, #photoB {
-  transition: opacity 0.3s ease;
-}
 </style>
 </head>
 <body>
@@ -1158,9 +1153,29 @@ body {
 
 <!-- Photo viewer modal -->
 <div id="photoModal" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.92);align-items:center;justify-content:center;">
-<div id="photoContainer" style="position:relative;width:85%;max-height:90vh;display:flex;align-items:center;justify-content:center;">
-<img id="photoA" style="max-width:100%;max-height:90vh;object-fit:contain;border-radius:4px;position:absolute;"/>
-<img id="photoB" style="max-width:100%;max-height:90vh;object-fit:contain;border-radius:4px;position:absolute;"/>
+<div id="photoContainer" style="position:relative;display:flex;align-items:center;justify-content:center;width:85%;max-height:90vh;">
+<img class="gallery-slide" id="slide0" src="1.jpg" style="max-width:100%;max-height:90vh;object-fit:contain;border-radius:4px;display:block;opacity:1;transition:opacity 0.3s ease;"/>
+<img class="gallery-slide" id="slide1" src="2.jpg" style="max-width:100%;max-height:90vh;object-fit:contain;border-radius:4px;display:none;opacity:1;transition:opacity 0.3s ease;"/>
+<img class="gallery-slide" id="slide2" src="3.jpg" style="max-width:100%;max-height:90vh;object-fit:contain;border-radius:4px;display:none;opacity:1;transition:opacity 0.3s ease;"/>
+<img class="gallery-slide" id="slide3" src="4.jpg" style="max-width:100%;max-height:90vh;object-fit:contain;border-radius:4px;display:none;opacity:1;transition:opacity 0.3s ease;"/>
+<img class="gallery-slide" id="slide4" src="5.jpg" style="max-width:100%;max-height:90vh;object-fit:contain;border-radius:4px;display:none;opacity:1;transition:opacity 0.3s ease;"/>
+<img class="gallery-slide" id="slide5" src="6.jpg" style="max-width:100%;max-height:90vh;object-fit:contain;border-radius:4px;display:none;opacity:1;transition:opacity 0.3s ease;"/>
+<img class="gallery-slide" id="slide6" src="7.jpg" style="max-width:100%;max-height:90vh;object-fit:contain;border-radius:4px;display:none;opacity:1;transition:opacity 0.3s ease;"/>
+<img class="gallery-slide" id="slide7" src="8.jpg" style="max-width:100%;max-height:90vh;object-fit:contain;border-radius:4px;display:none;opacity:1;transition:opacity 0.3s ease;"/>
+<img class="gallery-slide" id="slide8" src="9.jpg" style="max-width:100%;max-height:90vh;object-fit:contain;border-radius:4px;display:none;opacity:1;transition:opacity 0.3s ease;"/>
+<img class="gallery-slide" id="slide9" src="10.jpg" style="max-width:100%;max-height:90vh;object-fit:contain;border-radius:4px;display:none;opacity:1;transition:opacity 0.3s ease;"/>
+<img class="gallery-slide" id="slide10" src="11.jpg" style="max-width:100%;max-height:90vh;object-fit:contain;border-radius:4px;display:none;opacity:1;transition:opacity 0.3s ease;"/>
+<img class="gallery-slide" id="slide11" src="12.jpg" style="max-width:100%;max-height:90vh;object-fit:contain;border-radius:4px;display:none;opacity:1;transition:opacity 0.3s ease;"/>
+<img class="gallery-slide" id="slide12" src="13.jpg" style="max-width:100%;max-height:90vh;object-fit:contain;border-radius:4px;display:none;opacity:1;transition:opacity 0.3s ease;"/>
+<img class="gallery-slide" id="slide13" src="14.jpg" style="max-width:100%;max-height:90vh;object-fit:contain;border-radius:4px;display:none;opacity:1;transition:opacity 0.3s ease;"/>
+<img class="gallery-slide" id="slide14" src="15.jpg" style="max-width:100%;max-height:90vh;object-fit:contain;border-radius:4px;display:none;opacity:1;transition:opacity 0.3s ease;"/>
+<img class="gallery-slide" id="slide15" src="16.jpg" style="max-width:100%;max-height:90vh;object-fit:contain;border-radius:4px;display:none;opacity:1;transition:opacity 0.3s ease;"/>
+<img class="gallery-slide" id="slide16" src="17.jpg" style="max-width:100%;max-height:90vh;object-fit:contain;border-radius:4px;display:none;opacity:1;transition:opacity 0.3s ease;"/>
+<img class="gallery-slide" id="slide17" src="18.jpg" style="max-width:100%;max-height:90vh;object-fit:contain;border-radius:4px;display:none;opacity:1;transition:opacity 0.3s ease;"/>
+<img class="gallery-slide" id="slide18" src="19.jpg" style="max-width:100%;max-height:90vh;object-fit:contain;border-radius:4px;display:none;opacity:1;transition:opacity 0.3s ease;"/>
+<img class="gallery-slide" id="slide19" src="20.jpg" style="max-width:100%;max-height:90vh;object-fit:contain;border-radius:4px;display:none;opacity:1;transition:opacity 0.3s ease;"/>
+<img class="gallery-slide" id="slide20" src="21.jpg" style="max-width:100%;max-height:90vh;object-fit:contain;border-radius:4px;display:none;opacity:1;transition:opacity 0.3s ease;"/>
+<img class="gallery-slide" id="slide21" src="22.jpg" style="max-width:100%;max-height:90vh;object-fit:contain;border-radius:4px;display:none;opacity:1;transition:opacity 0.3s ease;"/>
 </div>
 <div id="photoPrev" style="position:absolute;left:0;top:0;bottom:0;width:60px;display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,0);"><span style="color:#fff;font-size:32px;font-weight:bold;text-shadow:0 0 10px rgba(0,0,0,0.8);">❮</span></div>
 <div id="photoNext" style="position:absolute;right:0;top:0;bottom:0;width:60px;display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,0);"><span style="color:#fff;font-size:32px;font-weight:bold;text-shadow:0 0 10px rgba(0,0,0,0.8);">❯</span></div>
@@ -1503,26 +1518,15 @@ const galleryPhotos = [
   "19.jpg","20.jpg","21.jpg","22.jpg"
 ];
 let currentPhotoIdx = 0;
-var activeImg = 'A';
-var galleryCache = {};
-
-// Preload all images
-for (var i = 0; i < galleryPhotos.length; i++) {
-  (function(idx) {
-    var img = new Image();
-    img.src = galleryPhotos[idx];
-    galleryCache[idx] = img;
-  })(i);
-}
+var totalSlides = 22;
 
 function openPhoto(idx) {
   currentPhotoIdx = idx;
-  var imgA = document.getElementById('photoA');
-  var imgB = document.getElementById('photoB');
-  imgA.src = galleryPhotos[idx];
-  imgA.style.opacity = '1';
-  imgB.style.opacity = '0';
-  activeImg = 'A';
+  // Hide all, show target
+  for (var i = 0; i < totalSlides; i++) {
+    document.getElementById('slide' + i).style.display = 'none';
+  }
+  document.getElementById('slide' + idx).style.display = 'block';
   document.getElementById('photoModal').style.display = 'flex';
 }
 
@@ -1531,40 +1535,41 @@ function closePhoto() {
 }
 
 function showPhoto(idx) {
-  currentPhotoIdx = idx;
-  var show, hide;
-  if (activeImg === 'A') {
-    show = document.getElementById('photoB');
-    hide = document.getElementById('photoA');
-    activeImg = 'B';
-  } else {
-    show = document.getElementById('photoA');
-    hide = document.getElementById('photoB');
-    activeImg = 'A';
-  }
-  show.src = galleryPhotos[idx];
-  show.style.opacity = '1';
-  hide.style.opacity = '0';
+  var oldSlide = document.getElementById('slide' + currentPhotoIdx);
+  var newSlide = document.getElementById('slide' + idx);
+  // Crossfade: fade out old, fade in new
+  newSlide.style.display = 'block';
+  newSlide.style.position = 'absolute';
+  newSlide.style.opacity = '0';
+  // Force reflow
+  newSlide.offsetHeight;
+  newSlide.style.opacity = '1';
+  oldSlide.style.opacity = '0';
+  setTimeout(function() {
+    oldSlide.style.display = 'none';
+    oldSlide.style.opacity = '1';
+    oldSlide.style.position = '';
+    newSlide.style.position = '';
+    currentPhotoIdx = idx;
+  }, 300);
 }
 
 function nextPhoto() {
-  showPhoto((currentPhotoIdx + 1) % galleryPhotos.length);
+  showPhoto((currentPhotoIdx + 1) % totalSlides);
 }
 function prevPhoto() {
-  showPhoto((currentPhotoIdx - 1 + galleryPhotos.length) % galleryPhotos.length);
+  showPhoto((currentPhotoIdx - 1 + totalSlides) % totalSlides);
 }
 
-// Close only on dark background click
+// Close only on dark background
 document.getElementById('photoModal').addEventListener('click', function(e) {
   if (e.target === this) closePhoto();
 });
-
-// Container click - don't close
 document.getElementById('photoContainer').addEventListener('click', function(e) {
   e.stopPropagation();
 });
 
-// Prev/Next - use div not button, touchend for mobile
+// Prev/Next
 ['photoPrev','photoNext'].forEach(function(id) {
   var el = document.getElementById(id);
   var fn = id === 'photoPrev' ? prevPhoto : nextPhoto;
